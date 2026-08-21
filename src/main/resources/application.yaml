@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: jdbc:h2:mem:deliveryappdb
+    driver-class-name: org.h2.Driver
+    username: admin
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+server:
+  port: 8081
+springdoc:
+  swagger-ui:
+    path: /swagger
+
+app:
+  custom:
+    api:
+      version: 1.0.0
+
+#jwt:
+#  secret: ID32WQ74uayoGI3nW7o9MEZKoaNzDongyYltCai2aY8kdWIqlrn4dmnbA3EFngsi
+#  expiration: 86400000
+#  refresh-window: 604800000
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  refresh-window: ${JWT_REFRESH_WINDOW}
+

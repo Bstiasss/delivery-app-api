@@ -1,0 +1,103 @@
+package com.deliveryapp.backend.common.config;
+
+import com.deliveryapp.backend.common.filters.JwtFilter;
+import com.deliveryapp.backend.user.service.CustomUserDetailService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@RequiredArgsConstructor
+@Configuration
+public class SecurityConfig {
+
+    private final CustomUserDetailService userDetailService;
+    private final JwtFilter jwtFilter;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/api/v1/auth/register",
+                                "/api/v1/auth/login").permitAll()
+                        .requestMatchers("/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/products").hasRole("MERCHANT")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("MERCHANT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasAnyRole("ADMINISTRATOR", "MERCHANT")
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/stores").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/stores/**").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/stores").hasRole("MERCHANT")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/stores/**").hasRole("MERCHANT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/stores/**").hasAnyRole("ADMINISTRATOR", "MERCHANT")
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/my-orders").hasRole("CONSUMER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAnyRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/{id}/location").hasAnyRole("RIDER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/unassigned").hasRole("RIDER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasRole("CONSUMER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").hasAnyRole("RIDER", "MERCHANT")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/**").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasAnyRole("ADMINISTRATOR")
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/me").hasAnyRole("MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/me").hasAnyRole("MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/me").hasAnyRole("MERCHANT", "RIDER", "CONSUMER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMINISTRATOR")
+
+                        .anyRequest().authenticated()
+
+                )
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+        return config.getAuthenticationManager();
+    }
+
+
+}

@@ -316,8 +316,9 @@ Proyecto académico desarrollado para la Universidad Tecnológica Nacional (UTN)
 
 Desarrolladores:
 - Amato Lebron, Tomás
-- Iavicoli Dulcet, Nicolás
 - Lomuoio, Lucas José
+- Rossitto, Sofía Elizabeth
+- Gomenza, Galo
 
 ---
 

@@ -20,4 +20,5 @@ public class ProductResponseDTO {
     private String imageURL;
     private EProductStatus status;
     private Long storeId;
+    private String storeName;
 }

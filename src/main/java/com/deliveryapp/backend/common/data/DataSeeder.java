@@ -51,7 +51,7 @@ public class DataSeeder implements CommandLineRunner {
                             .name("Juan")
                             .lastName("Skywalker")
                             .email("juanSky@mail.com")
-                            .password(passwordEncoder.encode("passDeJuan"))
+                            .password(passwordEncoder.encode("passDeJuan1"))
                             .role(ERole.ROLE_CONSUMER)
                             .build()
             );
@@ -61,7 +61,7 @@ public class DataSeeder implements CommandLineRunner {
                             .name("Pedro")
                             .lastName("Nightwalker")
                             .email("pedronight@mail.com")
-                            .password(passwordEncoder.encode("passDePedro"))
+                            .password(passwordEncoder.encode("passDePedro1"))
                             .role(ERole.ROLE_MERCHANT)
                             .build()
             );
@@ -71,7 +71,7 @@ public class DataSeeder implements CommandLineRunner {
                             .name("Monica")
                             .lastName("Azul")
                             .email("monicaazul@mail.com")
-                            .password(passwordEncoder.encode("passDeMonica"))
+                            .password(passwordEncoder.encode("passDeMonica1"))
                             .role(ERole.ROLE_MERCHANT)
                             .build()
             );
@@ -81,7 +81,7 @@ public class DataSeeder implements CommandLineRunner {
                             .name("Ana")
                             .lastName("Sunwalker")
                             .email("ana@mail.com")
-                            .password(passwordEncoder.encode("passDeAna"))
+                            .password(passwordEncoder.encode("passDeAna1"))
                             .role(ERole.ROLE_RIDER)
                             .build()
             );
@@ -91,7 +91,7 @@ public class DataSeeder implements CommandLineRunner {
                             .name("Maria")
                             .lastName("Moonwalker")
                             .email("maria@mail.com")
-                            .password(passwordEncoder.encode("passDeMaria"))
+                            .password(passwordEncoder.encode("passDeMaria1"))
                             .role(ERole.ROLE_ADMINISTRATOR)
                             .build()
             );
@@ -101,7 +101,7 @@ public class DataSeeder implements CommandLineRunner {
                             .name("Lucas")
                             .lastName("Lomuoi")
                             .email("lucas@mail.com")
-                            .password(passwordEncoder.encode("passDeLucas"))
+                            .password(passwordEncoder.encode("passDeLucas1"))
                             .role(ERole.ROLE_CONSUMER)
                             .build()
             );

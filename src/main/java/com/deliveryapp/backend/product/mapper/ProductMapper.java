@@ -15,6 +15,7 @@ public class ProductMapper {
         dto.setImageURL(product.getImageURL());
         dto.setStatus(product.getStatus());
         dto.setStoreId(product.getStore().getId());
+        dto.setStoreName(product.getStore().getName());
 
         return dto;
     }

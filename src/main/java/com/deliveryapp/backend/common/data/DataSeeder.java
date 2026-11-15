@@ -48,101 +48,395 @@ public class DataSeeder implements CommandLineRunner {
         if (userRepository.count() == 0) {
             userRepository.save(
                     User.builder()
-                            .name("Juan")
-                            .lastName("Skywalker")
-                            .email("juanSky@mail.com")
-                            .password(passwordEncoder.encode("passDeJuan1"))
-                            .role(ERole.ROLE_CONSUMER)
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
-                            .name("Pedro")
-                            .lastName("Nightwalker")
-                            .email("pedronight@mail.com")
-                            .password(passwordEncoder.encode("passDePedro1"))
-                            .role(ERole.ROLE_MERCHANT)
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
-                            .name("Monica")
-                            .lastName("Azul")
-                            .email("monicaazul@mail.com")
-                            .password(passwordEncoder.encode("passDeMonica1"))
-                            .role(ERole.ROLE_MERCHANT)
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
-                            .name("Ana")
-                            .lastName("Sunwalker")
-                            .email("ana@mail.com")
-                            .password(passwordEncoder.encode("passDeAna1"))
-                            .role(ERole.ROLE_RIDER)
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
-                            .name("Maria")
-                            .lastName("Moonwalker")
-                            .email("maria@mail.com")
-                            .password(passwordEncoder.encode("passDeMaria1"))
-                            .role(ERole.ROLE_ADMINISTRATOR)
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
                             .name("Lucas")
-                            .lastName("Lomuoi")
+                            .lastName("Dark Vader")
                             .email("lucas@mail.com")
                             .password(passwordEncoder.encode("passDeLucas1"))
                             .role(ERole.ROLE_CONSUMER)
                             .build()
             );
 
+            userRepository.save(
+                    User.builder()
+                            .name("Galo")
+                            .lastName("Skywalker")
+                            .email("galo@mail.com")
+                            .password(passwordEncoder.encode("passDeGalo1"))
+                            .role(ERole.ROLE_MERCHANT)
+                            .build()
+            );
+
+            userRepository.save(
+                    User.builder()
+                            .name("Sofia")
+                            .lastName("Leia")
+                            .email("sofia@mail.com")
+                            .password(passwordEncoder.encode("passDeSofia1"))
+                            .role(ERole.ROLE_MERCHANT)
+                            .build()
+            );
+
+            userRepository.save(
+                    User.builder()
+                            .name("Tomas")
+                            .lastName("Yoda")
+                            .email("tomas@mail.com")
+                            .password(passwordEncoder.encode("passDeTomas1"))
+                            .role(ERole.ROLE_RIDER)
+                            .build()
+            );
+
+            userRepository.save(
+                    User.builder()
+                            .name("Nico")
+                            .lastName("Chewbacca")
+                            .email("nico@mail.com")
+                            .password(passwordEncoder.encode("passDeNico1"))
+                            .role(ERole.ROLE_ADMINISTRATOR)
+                            .build()
+            );
+
+
 
             storeRepository.save(
                     Store.builder()
-                            .name("Pizza Hut de Pedro")
-                            .address("Calle 13")
-                            .owner(userRepository.findByEmail("pedronight@mail.com").get())
+                            .name("Galo Hut")
+                            .address("Moreno 2902 - MDP")
+                            .owner(userRepository.findByEmail("galo@mail.com").get())
                             .latitude(BigDecimal.valueOf(-37.994044345914496))
                             .longitude(BigDecimal.valueOf(-57.55520222953616))
                             .build()
             );
 
-            List<Store> stores = IntStream.rangeClosed(1,20)
-                    .mapToObj(i -> Store.builder()
-                            .name(truncate(faker.company().name(), 25))
-                            .address(truncate(faker.address().streetAddress(), 40))
-                                    .latitude(BigDecimal.valueOf(faker.number().randomDouble(7, -38, -37))
-                                            .setScale(7, RoundingMode.HALF_UP))
-                                    .longitude(BigDecimal.valueOf(faker.number().randomDouble(7, -58, -57))
-                                            .setScale(7, RoundingMode.HALF_UP))
-                            .owner(userRepository.findByEmail("pedronight@mail.com").get())
+            storeRepository.save(
+                    Store.builder()
+                            .name("Sushi Zen")
+                            .address("Las Heras 2625 - MDP")
+                            .owner(userRepository.findByEmail("sofia@mail.com").get())
+                            .latitude(BigDecimal.valueOf(-37.994044345914496))
+                            .longitude(BigDecimal.valueOf(-57.55520222953616))
                             .build()
-                    ).toList();
+            );
 
-            storeRepository.saveAll(stores);
-
-            List<Product> products = IntStream.rangeClosed(1, 100)
-                    .mapToObj(i -> Product.builder()
-                            .name(faker.food().dish())
-                            .price(BigDecimal.valueOf(faker.number().numberBetween(1, 100)))
-                            .description(faker.lorem().maxLengthSentence(80))
-                            .imageURL(faker.internet().image())
-                            .status(EProductStatus.values()[faker.random().nextInt(EProductStatus.values().length)])
+        /*    productRepository.save(
+                    Product.builder()
+                            .name("Pizza Napolitana")
+                            .price(BigDecimal.valueOf(12500))
+                            .description("Masa suave y esponjosa, bordes inflados, salsa de tomate fresca y mozzarella derretida con albahaca" )
+                            .imageURL("/assets/productImgs/1/1.jpg")
+                            .status(EProductStatus.AVAILABLE)
                             .store(storeRepository.findById(1L).get())
                             .build()
-                    ).toList();
 
-            productRepository.saveAll(products);
+            );
+*/
+////////////// Productos de la Pizzeria de Galo
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Muzzarella")
+                            .price(BigDecimal.valueOf(11000))
+                            .description("Clásica salsa de tomate casera, abundante muzzarella derretida y orégano.")
+                            .imageURL("/assets/productImgs/1/1.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Napolitana")
+                            .price(BigDecimal.valueOf(12500))
+                            .description("Salsa de tomate, muzzarella, rodajas de tomate fresco, ajo y albahaca.")
+                            .imageURL("/assets/productImgs/1/2.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Fugazzeta")
+                            .price(BigDecimal.valueOf(12000))
+                            .description("Base crocante con abundante cebolla blanca caramelizada, muzzarella y orégano.")
+                            .imageURL("/assets/productImgs/1/3.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Calabresa")
+                            .price(BigDecimal.valueOf(13500))
+                            .description("Salsa de tomate, muzzarella fundida y rodajas de longaniza calabresa.")
+                            .imageURL("/assets/productImgs/1/4.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Jamón y Morrones")
+                            .price(BigDecimal.valueOf(13200))
+                            .description("Salsa de tomate, muzzarella, jamón cocido natural y morrones asados.")
+                            .imageURL("/assets/productImgs/1/5.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Cuatro Quesos")
+                            .price(BigDecimal.valueOf(14500))
+                            .description("Combinación intensa de muzzarella, roquefort, parmesano y queso provolone.")
+                            .imageURL("/assets/productImgs/1/6.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Rúcula y Crudo")
+                            .price(BigDecimal.valueOf(15200))
+                            .description("Muzzarella, jamón crudo estacionado, hojas de rúcula fresca y parmesano.")
+                            .imageURL("/assets/productImgs/1/7.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Fugazzeta Rellena")
+                            .price(BigDecimal.valueOf(16000))
+                            .description("Doble masa rellena de muzzarella y jamón, cubierta con cebolla dorada.")
+                            .imageURL("/assets/productImgs/1/8.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Pepperoni")
+                            .price(BigDecimal.valueOf(14000))
+                            .description("Salsa de tomate, muzzarella y rodajas de pepperoni ligeramente picante.")
+                            .imageURL("/assets/productImgs/1/9.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Provolone")
+                            .price(BigDecimal.valueOf(13800))
+                            .description("Salsa de tomate, muzzarella y queso provolone gratinado con chimichurri.")
+                            .imageURL("/assets/productImgs/1/10.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Anchoas")
+                            .price(BigDecimal.valueOf(12800))
+                            .description("Salsa de tomate especiada, filetes de anchoas, alcaparras y aceitunas negras.")
+                            .imageURL("/assets/productImgs/1/11.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Champiñones")
+                            .price(BigDecimal.valueOf(14200))
+                            .description("Salsa de tomate, muzzarella, champiñones salteados al ajillo y perejil.")
+                            .imageURL("/assets/productImgs/1/12.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Roquefort y Apio")
+                            .price(BigDecimal.valueOf(14400))
+                            .description("Base de muzzarella con queso azul fundido, apio fresco picado y nueces.")
+                            .imageURL("/assets/productImgs/1/13.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Palmitos y Salsa Golf")
+                            .price(BigDecimal.valueOf(14800))
+                            .description("Muzzarella, jamón cocido, palmitos en rodajas, huevo duro y salsa golf.")
+                            .imageURL("/assets/productImgs/1/14.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Pizza Vegetariana")
+                            .price(BigDecimal.valueOf(13400))
+                            .description("Salsa de tomate, muzzarella, berenjenas, zucchini, cebolla y morrones.")
+                            .imageURL("/assets/productImgs/1/15.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+
+
+/////////////// Productos de Sushi de Sofia
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Nigiri de Salmón")
+                            .price(BigDecimal.valueOf(25100))
+                            .description("Finas láminas de salmón fresco sobre arroz avinagrado.")
+                            .imageURL("/assets/productImgs/2/1.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Philadelphia")
+                            .price(BigDecimal.valueOf(23500))
+                            .description("Relleno de salmón fresco, queso crema y palta, cubierto con sésamo.")
+                            .imageURL("/assets/productImgs/2/2.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll New York")
+                            .price(BigDecimal.valueOf(22800))
+                            .description("Salmón rosado, palta fresca y pepino envueltos en arroz y sésamo.")
+                            .imageURL("/assets/productImgs/2/3.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll California")
+                            .price(BigDecimal.valueOf(20500))
+                            .description("Kanikama, palta y pepino con semillas de sésamo tostado por fuera.")
+                            .imageURL("/assets/productImgs/2/4.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Hot Roll de Salmón")
+                            .price(BigDecimal.valueOf(24900))
+                            .description("Roll rebozado en panko crocante, relleno de salmón y queso crema.")
+                            .imageURL("/assets/productImgs/2/5.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Sashimi de Salmón")
+                            .price(BigDecimal.valueOf(27500))
+                            .description("Cortes frescos de salmón rosado premium servidos sin arroz.")
+                            .imageURL("/assets/productImgs/2/6.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Buenos Aires")
+                            .price(BigDecimal.valueOf(26200))
+                            .description("Relleno de salmón, langostinos y queso, cubierto con láminas de salmón.")
+                            .imageURL("/assets/productImgs/2/7.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Geishas de Salmón")
+                            .price(BigDecimal.valueOf(25800))
+                            .description("Bocados de queso crema y palta envueltos en láminas de salmón fresco.")
+                            .imageURL("/assets/productImgs/2/8.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Acevichado")
+                            .price(BigDecimal.valueOf(26500))
+                            .description("Langostinos empanizados y palta, bañado en salsa acevichada cítrica.")
+                            .imageURL("/assets/productImgs/2/9.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Temaki de Langostinos")
+                            .price(BigDecimal.valueOf(18900))
+                            .description("Cono de alga nori relleno de arroz, langostinos furai, palta y queso.")
+                            .imageURL("/assets/productImgs/2/10.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Vegano")
+                            .price(BigDecimal.valueOf(19500))
+                            .description("Palta, pepino, zanahoria glaseada y tomates secos con sésamo.")
+                            .imageURL("/assets/productImgs/2/11.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Combinado 30 Piezas")
+                            .price(BigDecimal.valueOf(48000))
+                            .description("Selección variada de rolls, nigiris y geishas de salmón fresco.")
+                            .imageURL("/assets/productImgs/2/12.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+
+
+
+
+/*
 
             List<Product> pizzaProducts = productRepository.findAll()
                     .stream()
@@ -276,18 +570,7 @@ public class DataSeeder implements CommandLineRunner {
                             .build()
             );
 
-            products = IntStream.rangeClosed(1, 50)
-                    .mapToObj(i -> Product.builder()
-                            .name(faker.food().dish())
-                            .price(BigDecimal.valueOf(faker.number().numberBetween(1, 100)))
-                            .description(faker.lorem().maxLengthSentence(80))
-                            .imageURL(faker.internet().image())
-                            .status(EProductStatus.values()[faker.random().nextInt(EProductStatus.values().length)])
-                            .store(storeRepository.findById(2L).get())
-                            .build()
-                    ).toList();
 
-            productRepository.saveAll(products);
 
 
             productRepository.save(
@@ -311,7 +594,7 @@ public class DataSeeder implements CommandLineRunner {
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
-
+*/
 
             System.out.println("Datos de prueba cargados");
         }

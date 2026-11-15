@@ -49,6 +49,17 @@ public class OrderMapper {
                 .longitude(order.getLongitude())
                 .status(order.getStatus())
                 .paymentType(order.getPaymentType())
+                .storeName(order.getStore().getName())
+                .consumerName(
+                        order.getConsumer().getName() + " " +
+                                order.getConsumer().getLastName()
+                )
+                .riderName(
+                        order.getRider() != null
+                                ? order.getRider().getName() + " " +
+                                order.getRider().getLastName()
+                                : null
+                )
                 .build();
     }
 

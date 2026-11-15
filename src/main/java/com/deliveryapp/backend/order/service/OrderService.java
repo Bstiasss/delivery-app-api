@@ -245,14 +245,21 @@ public class OrderService implements IOrderService {
     @Transactional(readOnly = true)
     public Optional<OrderResponseDTO> findById(Long id) {
 
-        if (!authFacadeService.getCurrentUser().equals(orderRepository.findById(id).get().getRider()) &&
-                !authFacadeService.getCurrentUser().equals(orderRepository.findById(id).get().getConsumer()) &&
-                !authFacadeService.getCurrentUser().equals(orderRepository.findById(id).get().getStore().getOwner()) &&
-                !authFacadeService.getCurrentUser().getRole().equals(ERole.ROLE_ADMINISTRATOR)) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+
+        var currentUser = authFacadeService.getCurrentUser();
+
+        boolean isRider = currentUser.equals(order.getRider());
+        boolean isConsumer = currentUser.equals(order.getConsumer());
+        boolean isStoreOwner = currentUser.equals(order.getStore().getOwner());
+        boolean isAdmin = currentUser.getRole().equals(ERole.ROLE_ADMINISTRATOR);
+
+        if (!isRider && !isConsumer && !isStoreOwner && !isAdmin) {
             throw new OrderNotFoundException(id);
         }
 
-        return orderRepository.findById(id).map(OrderMapper::toResponse);
+        return Optional.of(OrderMapper.toResponse(order));
     }
 
     @Override
@@ -415,11 +422,20 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> findMyOrders() {
-        Long consumerId = authFacadeService.getCurrentUser().getId();
-        return orderRepository.findByConsumerId(consumerId)
-                .stream()
-                .map(OrderMapper::toResponse)
-                .toList();
+        if (authFacadeService.getCurrentUser().getRole().equals(ERole.ROLE_CONSUMER)) {
+            Long consumerId = authFacadeService.getCurrentUser().getId();
+            return orderRepository.findByConsumerId(consumerId)
+                    .stream()
+                    .map(OrderMapper::toResponse)
+                    .toList();
+        } else {
+            Long riderId = authFacadeService.getCurrentUser().getId();
+            return orderRepository.findByRiderId(riderId)
+                    .stream()
+                    .map(OrderMapper::toResponse)
+                    .toList();
+
+        }
     }
 
     private List<OrderItem> prepararItems(CreateOrderRequestDTO dto) {

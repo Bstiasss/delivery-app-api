@@ -30,4 +30,7 @@ public class OrderResponseDTO {
     private BigDecimal longitude;
     private EOrderStatus status;
     private EPaymentType paymentType;
+    private String storeName;
+    private String consumerName;
+    private String riderName;
 }

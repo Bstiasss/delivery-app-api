@@ -14,4 +14,5 @@ public class StoreFilter {
     private BigDecimal latitude;
     private BigDecimal longitude;
     private Integer distance;
+    private Long ownerId;
 }

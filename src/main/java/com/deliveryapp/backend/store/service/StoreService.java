@@ -68,9 +68,10 @@ public class StoreService implements IStoreService{
         );
 
         Specification<Store> specification = Specification.allOf(
-                StoreSpecification.byName(storeFilter.getName())
-                        .and(StoreSpecification.byDistanceLatitude(storeFilter.getLatitude(), storeFilter.getLongitude(), storeFilter.getDistance())
-                                .and(StoreSpecification.byDistanceLongitude(storeFilter.getLatitude(), storeFilter.getLongitude(), storeFilter.getDistance())))
+                StoreSpecification.byName(storeFilter.getName()),
+                StoreSpecification.byOwnerId(storeFilter.getOwnerId()),
+                StoreSpecification.byDistanceLatitude(storeFilter.getLatitude(), storeFilter.getLongitude(), storeFilter.getDistance()),
+                StoreSpecification.byDistanceLongitude(storeFilter.getLatitude(), storeFilter.getLongitude(), storeFilter.getDistance())
         );
 
         Page<Store> page = storeRepository.findAll(specification, pageRequest);

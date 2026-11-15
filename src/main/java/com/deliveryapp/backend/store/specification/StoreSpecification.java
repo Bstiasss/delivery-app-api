@@ -56,4 +56,13 @@ public class StoreSpecification {
         };
     }
 
+    public static Specification<Store> byOwnerId(Long ownerId) {
+        return (root, query, criteriaBuilder) -> {
+            if (ownerId == null) {
+                return null;
+            }
+            return criteriaBuilder.equal(root.get("owner").get("id"), ownerId);
+        };
+    }
+
 }

@@ -19,6 +19,7 @@ public class ProductRequestDTO {
     @Size(min = 3, max = 40, message = "El nombre del producto no puede superar los 40 caracteres ni tener menos de 3 caracteres")
     private String name;
 
+
     @NotNull(message = "El precio del producto no puede ser nulo")
     @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
     @Digits(integer = 6, fraction = 2, message = "El precio debe tener hasta 2 decimales")

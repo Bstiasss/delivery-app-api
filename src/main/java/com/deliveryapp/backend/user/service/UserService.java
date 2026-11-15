@@ -114,8 +114,8 @@ public class UserService implements IUserService {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         existingUser.setName(dto.getName());
         existingUser.setLastName(dto.getLastName());
-        existingUser.setPassword(dto.getPassword());
-
+        if (dto.getPassword() != null)
+                existingUser.setPassword(dto.getPassword());
 
         User savedUser = userRepository.save(existingUser);
         return userMapper.toResponse(savedUser);

@@ -91,10 +91,15 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<UserResponseDTO> updateMyProfile(@RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
+    public ResponseEntity<UserResponseDTO> updateMyProfile(@Valid @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
         Long id = authFacadeService.getCurrentUser().getId();
         log.info("Updating own user profile for user id {}", id);
-        userUpdateRequestDTO.setPassword(passwordEncoder.encode(userUpdateRequestDTO.getPassword()));
+
+        if (userUpdateRequestDTO.getPassword() == null || userUpdateRequestDTO.getPassword().isBlank())
+            userUpdateRequestDTO.setPassword(null);
+        else
+            userUpdateRequestDTO.setPassword(passwordEncoder.encode(userUpdateRequestDTO.getPassword()));
+
         UserResponseDTO userResponseDTO = userService.saveMyUserProfile(id, userUpdateRequestDTO);
         log.info("Updated own user profile for user id {}", id);
         return ResponseEntity.ok(userResponseDTO);

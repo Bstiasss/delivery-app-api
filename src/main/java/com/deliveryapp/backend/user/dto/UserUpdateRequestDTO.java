@@ -21,7 +21,7 @@ public class UserUpdateRequestDTO {
     @Size(max = 30, message = "El apellido no puede superar los 30 caracteres")
     private String lastName;
 
-    @NotBlank(message = "La contraseña no puede estar vacía")
+    @Size(min=6, message = "La contraseña debe tener al menos 6 caracteres")
     @Size(max = 20, message = "La contraseña no puede superar los 20 caracteres")
     private String password;
 

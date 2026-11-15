@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/products").hasAnyRole("ADMINISTRATOR", "MERCHANT", "RIDER", "CONSUMER")

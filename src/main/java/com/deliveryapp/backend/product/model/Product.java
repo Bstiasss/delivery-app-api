@@ -41,11 +41,4 @@ public class Product {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToMany(
-            mappedBy = "products",
-            cascade = CascadeType.ALL)
-    private List<Order> orders =
-            new ArrayList<>();
-
-
 }

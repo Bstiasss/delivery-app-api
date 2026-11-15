@@ -17,7 +17,7 @@ import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
+import com.deliveryapp.backend.order.model.OrderItem;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -49,7 +49,7 @@ public class DataSeeder implements CommandLineRunner {
             userRepository.save(
                     User.builder()
                             .name("Lucas")
-                            .lastName("Dark Vader")
+                            .lastName("Darth Vader")
                             .email("lucas@mail.com")
                             .password(passwordEncoder.encode("passDeLucas1"))
                             .role(ERole.ROLE_CONSUMER)

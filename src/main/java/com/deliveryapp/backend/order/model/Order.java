@@ -55,13 +55,13 @@ public class Order {
     @Column(name = "longitude", nullable = false, precision = 10, scale = 7)
     private BigDecimal longitude;
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_product",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private List<Product> products = new ArrayList<>();
+    @Builder.Default
+    private List<OrderItem> items = new ArrayList<>();
 
     @Column(name = "total", nullable = false, precision = 9, scale = 2)
     private BigDecimal total;
@@ -76,4 +76,16 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private EPaymentType paymentType;
 
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void linkItemsToOrder() {
+        if (items != null) {
+            items.forEach(item -> item.setOrder(this));
+        }
+    }
 }

@@ -1,61 +1,86 @@
 package com.deliveryapp.backend.order.mapper;
 
 import com.deliveryapp.backend.order.dto.CreateOrderRequestDTO;
+import com.deliveryapp.backend.order.dto.OrderItemResponseDTO;
 import com.deliveryapp.backend.order.dto.OrderResponseDTO;
 import com.deliveryapp.backend.order.enums.EOrderStatus;
 import com.deliveryapp.backend.order.model.Order;
-import com.deliveryapp.backend.product.model.Product;
+import com.deliveryapp.backend.order.model.OrderItem;
 import com.deliveryapp.backend.store.model.Store;
 import com.deliveryapp.backend.user.model.User;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public class OrderMapper {
+
     public static OrderResponseDTO toResponse(Order order) {
 
-        OrderResponseDTO dto = OrderResponseDTO.builder()
+        List<OrderItemResponseDTO> items = order.getItems()
+                .stream()
+                .map(item -> OrderItemResponseDTO.builder()
+                        .productId(item.getProduct().getId())
+                        .productName(item.getProduct().getName())
+                        .quantity(item.getQuantity())
+                        .unitPrice(item.getUnitPrice())
+                        .subtotal(item.getSubtotal())
+                        .build())
+                .toList();
+
+        List<Long> products = order.getItems()
+                .stream()
+                .map(item -> item.getProduct().getId())
+                .toList();
+
+        return OrderResponseDTO.builder()
                 .id(order.getId())
+                .riderId(order.getRider() != null
+                        ? order.getRider().getId()
+                        : null)
                 .storeId(order.getStore().getId())
                 .consumerId(order.getConsumer().getId())
-                .products(order.getProducts().stream().map(Product::getId).toList())
-                .customerLongitude(order.getCustomerLongitude())
+                .products(products)
+                .items(items)
                 .customerAddress(order.getCustomerAddress())
                 .customerLatitude(order.getCustomerLatitude())
+                .customerLongitude(order.getCustomerLongitude())
                 .total(order.getTotal())
                 .latitude(order.getLatitude())
                 .longitude(order.getLongitude())
                 .status(order.getStatus())
                 .paymentType(order.getPaymentType())
                 .build();
-
-        Optional<User> rider = Optional.ofNullable(order.getRider());
-        if (rider.isPresent()) {
-            dto.setRiderId(order.getRider().getId());
-        }else{
-            dto.setRiderId(null);
-        }
-
-        return dto;
     }
 
-    public static Order toEntity(CreateOrderRequestDTO orderRequestDTO, User consumer,
-                                 Store store, BigDecimal total, List<Product> productList, EOrderStatus orderStatus, User rider) {
+    public static Order toEntity(
+            CreateOrderRequestDTO dto,
+            User consumer,
+            Store store,
+            BigDecimal total,
+            List<OrderItem> items,
+            EOrderStatus status,
+            User rider
+    ) {
 
-        return Order.builder()
-                .products(productList)
-                .customerAddress(orderRequestDTO.getCustomerAddress())
+        Order order = Order.builder()
+                .customerAddress(dto.getCustomerAddress() == null
+                        || dto.getCustomerAddress().isBlank()
+                        ? "Dirección no especificada"
+                        : dto.getCustomerAddress().trim())
                 .total(total)
-                .status(orderStatus)
+                .status(status)
                 .consumer(consumer)
                 .rider(rider)
                 .store(store)
                 .latitude(store.getLatitude())
                 .longitude(store.getLongitude())
-                .customerLatitude(orderRequestDTO.getCustomerLatitude())
-                .customerLongitude(orderRequestDTO.getCustomerLongitude())
-                .paymentType(orderRequestDTO.getPaymentType())
+                .customerLatitude(store.getLatitude())
+                .customerLongitude(store.getLongitude())
+                .paymentType(dto.getPaymentType())
                 .build();
+
+        items.forEach(order::addItem);
+
+        return order;
     }
 }

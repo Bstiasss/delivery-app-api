@@ -1,7 +1,10 @@
 package com.deliveryapp.backend.order.dto;
 
 import com.deliveryapp.backend.order.enums.EPaymentType;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,17 +19,12 @@ import java.util.List;
 @Builder
 public class CreateOrderRequestDTO {
 
-    @NotNull(message = "La dirección de entrega no puede ser nula")
+    @Size(max = 50, message = "La dirección no puede superar los 50 caracteres")
     private String customerAddress;
 
-    @NotNull(message = "Debe haber mínimo un producto")
-    private List<Long> products;
-
-    @NotNull(message = "La latitud de la entrega no puede ser nula")
-    private BigDecimal customerLatitude;
-
-    @NotNull(message = "La longitud de la entrega no puede ser nula")
-    private BigDecimal customerLongitude;
+    @NotEmpty(message = "Debe haber mínimo un producto")
+    @Valid
+    private List<OrderItemRequestDTO> items;
 
     @NotNull(message = "Debe seleccionar un método de pago")
     private EPaymentType paymentType;

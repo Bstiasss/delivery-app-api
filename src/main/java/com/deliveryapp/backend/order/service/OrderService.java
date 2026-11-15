@@ -36,6 +36,10 @@ import org.springframework.stereotype.Service;
 import com.deliveryapp.backend.store.repository.StoreRepository;
 import com.deliveryapp.backend.store.exception.StoreNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import com.deliveryapp.backend.order.dto.OrderItemRequestDTO;
+import com.deliveryapp.backend.order.model.OrderItem;
+import java.util.HashSet;
+import java.util.Set;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -210,31 +214,15 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO save(CreateOrderRequestDTO dto) {
 
-        List<Product> products = new ArrayList<>();
+        List<OrderItem> items = prepararItems(dto);
 
-        for (Long productId : dto.getProducts()) {
-            Optional<Product> optionalProduct = productRepository.findById(productId);
+        Store store = items.getFirst().getProduct().getStore();
 
-            if (optionalProduct.isEmpty()) {
-                throw new ProductNotFoundException(productId);
-            }
-
-            if (optionalProduct.get().getStatus().equals(EProductStatus.UNAVAILABLE)) {
-                throw new ProductException("El producto " + optionalProduct.get().getName() + " no está disponible");
-            }
-            optionalProduct.ifPresent(products::add);
-        }
-
-        if (dto.getProducts() == null || dto.getProducts().isEmpty()) {
-            throw new RuntimeException("Debe haber al menos un producto en el pedido");
-        }
-
-        Store store = products.getFirst().getStore();
-
-        BigDecimal total = products.stream()
-                .map(Product::getPrice)
+        BigDecimal total = items.stream()
+                .map(OrderItem::getSubtotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         Order order = OrderMapper.toEntity(
@@ -242,7 +230,7 @@ public class OrderService implements IOrderService {
                 authFacadeService.getCurrentUser(),
                 store,
                 total,
-                products,
+                items,
                 EOrderStatus.PENDING,
                 null
         );
@@ -254,6 +242,7 @@ public class OrderService implements IOrderService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<OrderResponseDTO> findById(Long id) {
 
         if (!authFacadeService.getCurrentUser().equals(orderRepository.findById(id).get().getRider()) &&
@@ -267,44 +256,45 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO update(Long id, CreateOrderRequestDTO dto) {
 
         Order order = orderRepository.findById(id)
-                .orElseThrow(() ->
-                        new OrderNotFoundException(id)
-                );
+                .orElseThrow(() -> new OrderNotFoundException(id));
 
-        List<Product> products =
-                productRepository.findAllById(dto.getProducts());
+        User currentUser = authFacadeService.getCurrentUser();
 
-        if (products.isEmpty()) {
-            throw new RuntimeException(
-                    "Debe haber al menos un producto"
-            );
+        if (!order.getConsumer().equals(currentUser)) {
+            throw new RuntimeException("No tenés permiso para modificar este pedido");
         }
 
-        Store store = products.getFirst().getStore();
+        if (order.getStatus() != EOrderStatus.PENDING) {
+            throw new RuntimeException("Solo se pueden modificar pedidos pendientes");
+        }
 
-        BigDecimal total = products.stream()
-                .map(Product::getPrice)
+        List<OrderItem> newItems = prepararItems(dto);
+
+        Store store = newItems.getFirst().getProduct().getStore();
+
+        if (!store.getId().equals(order.getStore().getId())) {
+            throw new RuntimeException("No se puede cambiar el comercio de un pedido");
+        }
+
+        BigDecimal total = newItems.stream()
+                .map(OrderItem::getSubtotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        order.setProducts(products);
+        order.getItems().clear();
 
-        order.setStore(store);
+        newItems.forEach(order::addItem);
 
-        order.setCustomerAddress(dto.getCustomerAddress());
-
-        order.setCustomerLatitude(dto.getCustomerLatitude());
-
-        order.setCustomerLongitude(dto.getCustomerLongitude());
-
-        order.setLatitude(dto.getCustomerLatitude());
-
-        order.setCustomerLongitude(dto.getCustomerLongitude());
+        order.setCustomerAddress(
+                dto.getCustomerAddress() == null || dto.getCustomerAddress().isBlank()
+                        ? "Dirección no especificada"
+                        : dto.getCustomerAddress().trim()
+        );
 
         order.setTotal(total);
-
         order.setPaymentType(dto.getPaymentType());
 
         Order updatedOrder = orderRepository.save(order);
@@ -414,6 +404,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> findUnassignedOrders() {
         return orderRepository.findByRiderIsNullAndStatus(EOrderStatus.CONFIRMED)
                 .stream()
@@ -429,5 +420,53 @@ public class OrderService implements IOrderService {
                 .stream()
                 .map(OrderMapper::toResponse)
                 .toList();
+    }
+
+    private List<OrderItem> prepararItems(CreateOrderRequestDTO dto) {
+
+        if (dto.getItems() == null || dto.getItems().isEmpty()) {
+            throw new RuntimeException("Debe haber al menos un producto");
+        }
+
+        List<OrderItem> items = new ArrayList<>();
+        Set<Long> productIds = new HashSet<>();
+
+        Store store = null;
+
+        for (OrderItemRequestDTO itemDTO : dto.getItems()) {
+
+            if (itemDTO.getQuantity() == null || itemDTO.getQuantity() < 1) {
+                throw new RuntimeException("La cantidad debe ser como mínimo 1");
+            }
+
+            if (!productIds.add(itemDTO.getProductId())) {
+                throw new RuntimeException("No se puede repetir un producto. Debe indicar su cantidad en una sola línea");
+            }
+
+            Product product = productRepository.findById(itemDTO.getProductId())
+                    .orElseThrow(() -> new ProductNotFoundException(itemDTO.getProductId()));
+
+            if (product.getStatus() == EProductStatus.UNAVAILABLE) {
+                throw new ProductException(
+                        "El producto " + product.getName() + " no está disponible"
+                );
+            }
+
+            if (store == null) {
+                store = product.getStore();
+            } else if (!store.getId().equals(product.getStore().getId())) {
+                throw new RuntimeException(
+                        "Todos los productos del pedido deben pertenecer al mismo comercio"
+                );
+            }
+
+            items.add(OrderItem.builder()
+                    .product(product)
+                    .quantity(itemDTO.getQuantity())
+                    .unitPrice(product.getPrice())
+                    .build());
+        }
+
+        return items;
     }
 }

@@ -33,4 +33,5 @@ public class OrderResponseDTO {
     private String storeName;
     private String consumerName;
     private String riderName;
+    private String storeAddress;
 }

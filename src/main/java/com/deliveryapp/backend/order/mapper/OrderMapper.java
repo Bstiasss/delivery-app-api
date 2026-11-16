@@ -60,6 +60,8 @@ public class OrderMapper {
                                 order.getRider().getLastName()
                                 : null
                 )
+                .storeAddress(order.getStore().getAddress())
+                .customerAddress(order.getCustomerAddress())
                 .build();
     }
 

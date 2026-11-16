@@ -26,7 +26,7 @@ public class ProductRequestDTO {
     private BigDecimal price;
 
     @NotBlank(message = "La descripción del producto no puede estar vacía")
-    @Size(max = 50, message = "La descripción no puede superar los 50 caracteres")
+    @Size(max = 200, message = "La descripción no puede superar los 200 caracteres")
     private String description;
 
     @Size(max = 250, message = "La URL de la imagen no puede superar los 250 caracteres")

@@ -28,7 +28,7 @@ public class Product {
     @Column(name = "price", nullable = false, precision = 15, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "description", nullable = false, length = 100)
+    @Column(name = "description", nullable = false, length = 200)
     private String description;
 
     @Column(name = "imageURL", length = 250)

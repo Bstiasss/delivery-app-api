@@ -5,6 +5,7 @@ import com.deliveryapp.backend.common.pagination.PaginationResult;
 import com.deliveryapp.backend.common.services.AuthFacadeService;
 import com.deliveryapp.backend.product.dto.ProductRequestDTO;
 import com.deliveryapp.backend.product.dto.ProductResponseDTO;
+import com.deliveryapp.backend.product.enums.EProductStatus;
 import com.deliveryapp.backend.product.exception.InvalidParameterSortByException;
 import com.deliveryapp.backend.product.exception.ProductNotFoundException;
 import com.deliveryapp.backend.product.exception.ProductSearchMissingLocationException;
@@ -92,8 +93,13 @@ public class ProductService implements IProductService {
     public ProductResponseDTO save(ProductRequestDTO productRequestDTO) {
         Store existingStore = getExistingStore(productRequestDTO);
         isOwnerVerification(existingStore);
-        Product productSaved = productRepository.save(ProductMapper.toEntity(productRequestDTO, existingStore));
 
+        Product product = ProductMapper.toEntity(productRequestDTO, existingStore);
+        if (product.getStock() != null && product.getStock() == 0) {
+            product.setStatus(EProductStatus.UNAVAILABLE);
+        }
+
+        Product productSaved = productRepository.save(product);
         return ProductMapper.toResponse(productSaved);
     }
 

@@ -321,6 +321,7 @@ public class OrderService implements IOrderService {
 */
 
     @Override
+    @Transactional
     public OrderResponseDTO updateMerchantOrderStatus(
             Long id,
             UpdateOrderStatusRequestDTO dto
@@ -344,6 +345,16 @@ public class OrderService implements IOrderService {
         if ((currentStatus == EOrderStatus.PENDING && (newStatus == EOrderStatus.CONFIRMED || newStatus == EOrderStatus.CANCELLED))
                 || (currentStatus == EOrderStatus.CONFIRMED_ASSIGNED && newStatus == EOrderStatus.DISPATCHED)) {
 
+            if (newStatus == EOrderStatus.CANCELLED) {
+                for (OrderItem item : order.getItems()) {
+                    Product product = item.getProduct();
+                    product.setStock(product.getStock() + item.getQuantity());
+                    if (product.getStock() > 0 && product.getStatus() == EProductStatus.UNAVAILABLE) {
+                        product.setStatus(EProductStatus.AVAILABLE);
+                    }
+                    productRepository.save(product);
+                }
+            }
             order.setStatus(newStatus);
 
             Order updatedOrder = orderRepository.save(order);
@@ -457,6 +468,7 @@ public class OrderService implements IOrderService {
 
         List<OrderItem> items = new ArrayList<>();
         Set<Long> productIds = new HashSet<>();
+        List<String> erroresStock = new ArrayList<>();
 
         Store store = null;
 
@@ -473,24 +485,20 @@ public class OrderService implements IOrderService {
             Product product = productRepository.findById(itemDTO.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException(itemDTO.getProductId()));
 
-            if (product.getStatus() == EProductStatus.UNAVAILABLE) {
-                throw new ProductException(
-                        "El producto " + product.getName() + " no está disponible"
-                );
-            }
-
-            if (itemDTO.getQuantity() > productRepository.findById(itemDTO.getProductId()).get().getStock()){
-                throw new ProductException(
-                        "El producto " + product.getName() + " no tiene suficiente stock"
-                );
-            }
-
             if (store == null) {
                 store = product.getStore();
             } else if (!store.getId().equals(product.getStore().getId())) {
                 throw new RuntimeException(
                         "Todos los productos del pedido deben pertenecer al mismo comercio"
                 );
+            }
+
+            int stockDisponible = product.getStock() != null ? product.getStock() : 0;
+
+            if (product.getStatus() == EProductStatus.UNAVAILABLE || stockDisponible == 0) {
+                erroresStock.add(product.getName() + " (sin stock)");
+            } else if (itemDTO.getQuantity() > stockDisponible) {
+                erroresStock.add(product.getName() + " (disponible: " + stockDisponible + ")");
             }
 
             items.add(OrderItem.builder()
@@ -500,28 +508,26 @@ public class OrderService implements IOrderService {
                     .build());
         }
 
+        if (!erroresStock.isEmpty()) {
+            throw new ProductException(
+                    "No se pudo confirmar la compra. Revisá el stock de: " + String.join(", ", erroresStock)
+            );
+        }
+
         return items;
     }
 
-    private void updateProductsStock (List<OrderItem> items){
-
+    private void updateProductsStock(List<OrderItem> items) {
         for (OrderItem item : items) {
-            Product product = productRepository.findById(item.getProduct().getId()).get();
-
-            Integer currentStock = product.getStock();
-
-            Integer newStock = currentStock - item.getQuantity();
-
+            Product product = item.getProduct();
+            int newStock = product.getStock() - item.getQuantity();
             product.setStock(newStock);
 
-            if (newStock == 0){
+            if (newStock == 0) {
                 product.setStatus(EProductStatus.UNAVAILABLE);
             }
 
             productRepository.save(product);
-
-
         }
-
     }
 }

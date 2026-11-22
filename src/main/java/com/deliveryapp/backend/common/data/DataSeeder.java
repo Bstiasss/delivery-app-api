@@ -118,7 +118,7 @@ public class DataSeeder implements CommandLineRunner {
                             .build()
             );
 
-        /*    productRepository.save(
+/*    productRepository.save(
                     Product.builder()
                             .name("Pizza Napolitana")
                             .price(BigDecimal.valueOf(12500))
@@ -138,6 +138,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Clásica salsa de tomate casera, abundante muzzarella derretida y orégano.")
                             .imageURL("/assets/productImgs/1/1.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(8)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -149,6 +150,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella, rodajas de tomate fresco, ajo y albahaca.")
                             .imageURL("/assets/productImgs/1/2.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(5)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -160,6 +162,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Base crocante con abundante cebolla blanca caramelizada, muzzarella y orégano.")
                             .imageURL("/assets/productImgs/1/3.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(10)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -171,6 +174,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella fundida y rodajas de longaniza calabresa.")
                             .imageURL("/assets/productImgs/1/4.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(3)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -182,6 +186,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella, jamón cocido natural y morrones asados.")
                             .imageURL("/assets/productImgs/1/5.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(7)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -193,6 +198,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Combinación intensa de muzzarella, roquefort, parmesano y queso provolone.")
                             .imageURL("/assets/productImgs/1/6.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(0)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -204,6 +210,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Muzzarella, jamón crudo estacionado, hojas de rúcula fresca y parmesano.")
                             .imageURL("/assets/productImgs/1/7.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(4)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -215,6 +222,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Doble masa rellena de muzzarella y jamón, cubierta con cebolla dorada.")
                             .imageURL("/assets/productImgs/1/8.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(2)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -226,6 +234,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella y rodajas de pepperoni ligeramente picante.")
                             .imageURL("/assets/productImgs/1/9.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(9)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -237,6 +246,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella y queso provolone gratinado con chimichurri.")
                             .imageURL("/assets/productImgs/1/10.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(6)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -248,6 +258,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate especiada, filetes de anchoas, alcaparras y aceitunas negras.")
                             .imageURL("/assets/productImgs/1/11.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(1)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -259,6 +270,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella, champiñones salteados al ajillo y perejil.")
                             .imageURL("/assets/productImgs/1/12.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(8)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -270,6 +282,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Base de muzzarella con queso azul fundido, apio fresco picado y nueces.")
                             .imageURL("/assets/productImgs/1/13.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(5)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -281,6 +294,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Muzzarella, jamón cocido, palmitos en rodajas, huevo duro y salsa golf.")
                             .imageURL("/assets/productImgs/1/14.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(3)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -292,6 +306,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salsa de tomate, muzzarella, berenjenas, zucchini, cebolla y morrones.")
                             .imageURL("/assets/productImgs/1/15.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(7)
                             .store(storeRepository.findById(1L).get())
                             .build()
             );
@@ -307,6 +322,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Finas láminas de salmón fresco sobre arroz avinagrado.")
                             .imageURL("/assets/productImgs/2/1.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(10)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -318,6 +334,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Relleno de salmón fresco, queso crema y palta, cubierto con sésamo.")
                             .imageURL("/assets/productImgs/2/2.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(6)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -329,6 +346,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Salmón rosado, palta fresca y pepino envueltos en arroz y sésamo.")
                             .imageURL("/assets/productImgs/2/3.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(4)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -340,6 +358,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Kanikama, palta y pepino con semillas de sésamo tostado por fuera.")
                             .imageURL("/assets/productImgs/2/4.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(9)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -351,6 +370,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Roll rebozado en panko crocante, relleno de salmón y queso crema.")
                             .imageURL("/assets/productImgs/2/5.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(2)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -362,6 +382,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Cortes frescos de salmón rosado premium servidos sin arroz.")
                             .imageURL("/assets/productImgs/2/6.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(0)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -373,6 +394,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Relleno de salmón, langostinos y queso, cubierto con láminas de salmón.")
                             .imageURL("/assets/productImgs/2/7.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(5)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -384,6 +406,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Bocados de queso crema y palta envueltos en láminas de salmón fresco.")
                             .imageURL("/assets/productImgs/2/8.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(7)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -395,6 +418,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Langostinos empanizados y palta, bañado en salsa acevichada cítrica.")
                             .imageURL("/assets/productImgs/2/9.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(3)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -406,6 +430,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Cono de alga nori relleno de arroz, langostinos furai, palta y queso.")
                             .imageURL("/assets/productImgs/2/10.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(8)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -417,6 +442,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Palta, pepino, zanahoria glaseada y tomates secos con sésamo.")
                             .imageURL("/assets/productImgs/2/11.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(4)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );
@@ -428,6 +454,7 @@ public class DataSeeder implements CommandLineRunner {
                             .description("Selección variada de rolls, nigiris y geishas de salmón fresco.")
                             .imageURL("/assets/productImgs/2/12.jpg")
                             .status(EProductStatus.AVAILABLE)
+                            .stock(1)
                             .store(storeRepository.findById(2L).get())
                             .build()
             );

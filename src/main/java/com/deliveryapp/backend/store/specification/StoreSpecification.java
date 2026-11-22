@@ -64,5 +64,5 @@ public class StoreSpecification {
             return criteriaBuilder.equal(root.get("owner").get("id"), ownerId);
         };
     }
-
+ 
 }

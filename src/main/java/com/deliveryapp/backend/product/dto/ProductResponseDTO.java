@@ -18,6 +18,7 @@ public class ProductResponseDTO {
     private BigDecimal price;
     private String description;
     private String imageURL;
+    private Integer stock;
     private EProductStatus status;
     private Long storeId;
     private String storeName;

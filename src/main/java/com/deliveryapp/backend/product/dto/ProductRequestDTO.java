@@ -32,6 +32,10 @@ public class ProductRequestDTO {
     @Size(max = 250, message = "La URL de la imagen no puede superar los 250 caracteres")
     private String imageURL;
 
+    @NotBlank (message = "El stock no puede estar vacío")
+    @PositiveOrZero (message = "El stock debe ser un número positivo o cero")
+    private Integer stock;
+
     @NotNull(message = "El estado no puede ser nulo")
     private EProductStatus status;
 

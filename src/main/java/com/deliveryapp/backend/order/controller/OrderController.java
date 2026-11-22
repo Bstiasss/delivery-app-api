@@ -131,7 +131,7 @@ public class OrderController {
                 .body(orderResponseDTO);
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<OrderResponseDTO> updateOrder(
             @PathVariable Long id,
             @Valid @RequestBody CreateOrderRequestDTO createOrderRequestDTO
@@ -146,7 +146,7 @@ public class OrderController {
                 orderResponseDTO.getId());
 
         return ResponseEntity.ok(orderResponseDTO);
-    }
+    }*/
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<OrderResponseDTO> updateOrderStatus(

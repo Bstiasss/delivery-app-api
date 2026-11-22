@@ -311,6 +311,318 @@ public class DataSeeder implements CommandLineRunner {
                             .build()
             );
 
+
+
+/////////////// Productos de Sushi de Sofia
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Nigiri de Salmón")
+                            .price(BigDecimal.valueOf(25100))
+                            .description("Finas láminas de salmón fresco sobre arroz avinagrado.")
+                            .imageURL("/assets/productImgs/2/1.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(10)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Philadelphia")
+                            .price(BigDecimal.valueOf(23500))
+                            .description("Relleno de salmón fresco, queso crema y palta, cubierto con sésamo.")
+                            .imageURL("/assets/productImgs/2/2.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(6)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll New York")
+                            .price(BigDecimal.valueOf(22800))
+                            .description("Salmón rosado, palta fresca y pepino envueltos en arroz y sésamo.")
+                            .imageURL("/assets/productImgs/2/3.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(4)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll California")
+                            .price(BigDecimal.valueOf(20500))
+                            .description("Kanikama, palta y pepino con semillas de sésamo tostado por fuera.")
+                            .imageURL("/assets/productImgs/2/4.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(9)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Hot Roll de Salmón")
+                            .price(BigDecimal.valueOf(24900))
+                            .description("Roll rebozado en panko crocante, relleno de salmón y queso crema.")
+                            .imageURL("/assets/productImgs/2/5.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(2)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Sashimi de Salmón")
+                            .price(BigDecimal.valueOf(27500))
+                            .description("Cortes frescos de salmón rosado premium servidos sin arroz.")
+                            .imageURL("/assets/productImgs/2/6.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(0)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Buenos Aires")
+                            .price(BigDecimal.valueOf(26200))
+                            .description("Relleno de salmón, langostinos y queso, cubierto con láminas de salmón.")
+                            .imageURL("/assets/productImgs/2/7.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(5)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Geishas de Salmón")
+                            .price(BigDecimal.valueOf(25800))
+                            .description("Bocados de queso crema y palta envueltos en láminas de salmón fresco.")
+                            .imageURL("/assets/productImgs/2/8.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(7)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Acevichado")
+                            .price(BigDecimal.valueOf(26500))
+                            .description("Langostinos empanizados y palta, bañado en salsa acevichada cítrica.")
+                            .imageURL("/assets/productImgs/2/9.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(3)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Temaki de Langostinos")
+                            .price(BigDecimal.valueOf(18900))
+                            .description("Cono de alga nori relleno de arroz, langostinos furai, palta y queso.")
+                            .imageURL("/assets/productImgs/2/10.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(8)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Roll Vegano")
+                            .price(BigDecimal.valueOf(19500))
+                            .description("Palta, pepino, zanahoria glaseada y tomates secos con sésamo.")
+                            .imageURL("/assets/productImgs/2/11.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(4)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Combinado 30 Piezas")
+                            .price(BigDecimal.valueOf(48000))
+                            .description("Selección variada de rolls, nigiris y geishas de salmón fresco.")
+                            .imageURL("/assets/productImgs/2/12.jpg")
+                            .status(EProductStatus.AVAILABLE)
+                            .stock(1)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+
+
+
+
+/*
+
+            List<Product> pizzaProducts = productRepository.findAll()
+                    .stream()
+                    .filter(product -> product.getStore().getId().equals(1L))
+                    .limit(3)
+                    .toList();
+
+            User consumer = userRepository.findByEmail("juanSky@mail.com").get();
+
+            User rider = userRepository.findByEmail("ana@mail.com").get();
+
+            Store pizzaStore = storeRepository.findById(1L).get();
+
+            orderRepository.save(
+                    Order.builder()
+                            .consumer(consumer)
+                            .rider(null)
+                            .store(pizzaStore)
+                            .products(List.of(
+                                    pizzaProducts.get(0),
+                                    pizzaProducts.get(1)
+                            ))
+                            .customerAddress("Av Colon 1234")
+                            .customerLatitude(BigDecimal.valueOf(-37.9970000))
+                            .customerLongitude(BigDecimal.valueOf(-57.5500000))
+                            .longitude(pizzaStore.getLongitude())
+                            .latitude(pizzaStore.getLatitude())
+                            .total(
+                                    pizzaProducts.get(0).getPrice()
+                                            .add(pizzaProducts.get(1).getPrice())
+                            )
+                            .status(EOrderStatus.PENDING)
+                            .paymentType(EPaymentType.EFECTIVO)
+                            .build()
+            );
+
+            orderRepository.save(
+                    Order.builder()
+                            .consumer(consumer)
+                            .rider(rider)
+                            .store(pizzaStore)
+                            .products(List.of(
+                                    pizzaProducts.get(1),
+                                    pizzaProducts.get(2)
+                            ))
+                            .customerAddress("Av Independencia 4321")
+                            .customerLatitude(BigDecimal.valueOf(-37.9911111))
+                            .customerLongitude(BigDecimal.valueOf(-57.5611111))
+                            .longitude(pizzaStore.getLongitude())
+                            .latitude(pizzaStore.getLatitude())
+                            .total(
+                                    pizzaProducts.get(1).getPrice()
+                                            .add(pizzaProducts.get(2).getPrice())
+                            )
+                            .status(EOrderStatus.CONFIRMED)
+                            .paymentType(EPaymentType.TRANSFERENCIA)
+                            .build()
+            );
+
+            orderRepository.save(
+                    Order.builder()
+                            .consumer(consumer)
+                            .rider(rider)
+                            .store(pizzaStore)
+                            .products(List.of(
+                                    pizzaProducts.get(0)
+                            ))
+                            .customerAddress("Calle Falsa 123")
+                            .longitude(pizzaStore.getLongitude())
+                            .latitude(pizzaStore.getLatitude())
+                            .customerLatitude(BigDecimal.valueOf(-37.9855555))
+                            .customerLongitude(BigDecimal.valueOf(-57.5755555))
+                            .total(
+                                    pizzaProducts.get(0).getPrice()
+                            )
+                            .status(EOrderStatus.COMPLETED)
+                            .paymentType(EPaymentType.EFECTIVO)
+                            .build()
+            );
+
+            orderRepository.save(
+                    Order.builder()
+                            .consumer(consumer)
+                            .rider(null)
+                            .store(pizzaStore)
+                            .products(List.of(
+                                    pizzaProducts.get(2)
+                            ))
+                            .customerAddress("Diagonal Pueyrredon 555")
+                            .longitude(pizzaStore.getLongitude())
+                            .latitude(pizzaStore.getLatitude())
+                            .customerLatitude(BigDecimal.valueOf(-37.9888888))
+                            .customerLongitude(BigDecimal.valueOf(-57.5666666))
+                            .total(
+                                    pizzaProducts.get(2).getPrice()
+                            )
+                            .status(EOrderStatus.CANCELLED)
+                            .paymentType(EPaymentType.TRANSFERENCIA)
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Napolitana")
+                            .price(BigDecimal.valueOf(10.5))
+                            .description("Pizza Napo con todo")
+                            .imageURL("/pizzaNapolitana")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Calabrese")
+                            .price(BigDecimal.valueOf(14.0))
+                            .description("Pizza Calabria con todo")
+                            .imageURL("/pizzaCalabrese")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(1L).get())
+                            .build()
+            );
+
+            storeRepository.save(
+                    Store.builder()
+                            .name("Lomitos Hut de Monica")
+                            .address("Calle 20")
+                            .owner(userRepository.findByEmail("monicaazul@mail.com").get())
+                            .latitude(BigDecimal.valueOf(-37.982457540007395))
+                            .longitude(BigDecimal.valueOf(-57.56733097751799))
+                            .build()
+            );
+
+
+
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Lomo completo")
+                            .price(BigDecimal.valueOf(12.5))
+                            .description("Lomo complete con todo")
+                            .imageURL("/lomoCompleto")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+
+            productRepository.save(
+                    Product.builder()
+                            .name("Lomo basico")
+                            .price(BigDecimal.valueOf(5.5))
+                            .description("Lomo solo")
+                            .imageURL("/lomo basico")
+                            .status(EProductStatus.AVAILABLE)
+                            .store(storeRepository.findById(2L).get())
+                            .build()
+            );
+*/
+
             System.out.println("Datos de prueba cargados");
         }
 

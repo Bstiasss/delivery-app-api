@@ -508,11 +508,19 @@ public class OrderService implements IOrderService {
         for (OrderItem item : items) {
             Product product = productRepository.findById(item.getProduct().getId()).get();
 
-            Integer stockActual = product.getStock();
+            Integer currentStock = product.getStock();
 
-            product.setStock(stockActual - item.getQuantity());
+            Integer newStock = currentStock - item.getQuantity();
+
+            product.setStock(newStock);
+
+            if (newStock == 0){
+                product.setStatus(EProductStatus.UNAVAILABLE);
+            }
 
             productRepository.save(product);
+
+
         }
 
     }

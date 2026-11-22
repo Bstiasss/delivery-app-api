@@ -20,7 +20,7 @@ public interface IOrderService {
     PaginationResult<OrderResponseDTO> findAll(PaginationQuery paginationQuery, AdminOrderFilter orderFilter);
     OrderResponseDTO save(CreateOrderRequestDTO dto);
     Optional<OrderResponseDTO> findById(Long id);
-    OrderResponseDTO update(Long id, CreateOrderRequestDTO createOrderRequestDTO);
+    // VER COMENTARIO EN EL CONTROLLER OrderResponseDTO update(Long id, CreateOrderRequestDTO createOrderRequestDTO);
     OrderResponseDTO updateMerchantOrderStatus(Long id, @Valid UpdateOrderStatusRequestDTO dto);
     OrderResponseDTO updateRiderOrderStatus(Long id, @Valid UpdateOrderStatusRequestDTO dto);
     OrderResponseDTO updateOrderLocation(Long id, @Valid UpdateOrderLocationRequestDTO dto);

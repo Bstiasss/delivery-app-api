@@ -34,6 +34,9 @@ public class Product {
     @Column(name = "imageURL", length = 250)
     private String imageURL;
 
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
+
     @Enumerated(EnumType.STRING)
     private EProductStatus status;
 

@@ -237,6 +237,8 @@ public class OrderService implements IOrderService {
 
         Order newOrder = orderRepository.save(order);
 
+        updateProductsStock(items);
+
         return OrderMapper.toResponse(newOrder);
     }
 
@@ -262,6 +264,9 @@ public class OrderService implements IOrderService {
         return Optional.of(OrderMapper.toResponse(order));
     }
 
+    /* NO TIENE SENTIDO HACER UN UPDATE DE LA ORDEN SI NO VAMOS A PERMITIR HACER
+    MODIFICACIONES DE NINGUNA VARIABLE (PORQUE PARA CAMBIAR EL ESTADO, LA UBICACIÓN Y EL
+    REPARTIDOR, YA TENEMOS TRES MÉTODOS APARTE)
     @Override
     @Transactional
     public OrderResponseDTO update(Long id, CreateOrderRequestDTO dto) {
@@ -275,9 +280,14 @@ public class OrderService implements IOrderService {
             throw new RuntimeException("No tenés permiso para modificar este pedido");
         }
 
+        if (!order.getItems().equals()) {
+            throw new RuntimeException("No tenés permiso para modificar este pedido");
+        }
+
         if (order.getStatus() != EOrderStatus.PENDING) {
             throw new RuntimeException("Solo se pueden modificar pedidos pendientes");
         }
+
 
         List<OrderItem> newItems = prepararItems(dto);
 
@@ -308,6 +318,7 @@ public class OrderService implements IOrderService {
 
         return OrderMapper.toResponse(updatedOrder);
     }
+*/
 
     @Override
     public OrderResponseDTO updateMerchantOrderStatus(
@@ -468,6 +479,12 @@ public class OrderService implements IOrderService {
                 );
             }
 
+            if (itemDTO.getQuantity() > productRepository.findById(itemDTO.getProductId()).get().getStock()){
+                throw new ProductException(
+                        "El producto " + product.getName() + " no tiene suficiente stock"
+                );
+            }
+
             if (store == null) {
                 store = product.getStore();
             } else if (!store.getId().equals(product.getStore().getId())) {
@@ -484,5 +501,19 @@ public class OrderService implements IOrderService {
         }
 
         return items;
+    }
+
+    private void updateProductsStock (List<OrderItem> items){
+
+        for (OrderItem item : items) {
+            Product product = productRepository.findById(item.getProduct().getId()).get();
+
+            Integer stockActual = product.getStock();
+
+            product.setStock(stockActual - item.getQuantity());
+
+            productRepository.save(product);
+        }
+
     }
 }

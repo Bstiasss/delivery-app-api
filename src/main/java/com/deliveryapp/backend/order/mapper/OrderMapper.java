@@ -87,8 +87,8 @@ public class OrderMapper {
                 .store(store)
                 .latitude(store.getLatitude())
                 .longitude(store.getLongitude())
-                .customerLatitude(store.getLatitude())
-                .customerLongitude(store.getLongitude())
+                .customerLatitude(dto.getCustomerLatitude())
+                .customerLongitude(dto.getCustomerLongitude())
                 .paymentType(dto.getPaymentType())
                 .build();
 

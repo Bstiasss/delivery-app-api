@@ -15,6 +15,8 @@ import com.deliveryapp.backend.order.filter.AdminOrderFilter;
 import com.deliveryapp.backend.order.filter.OrderFilter;
 import com.deliveryapp.backend.order.mapper.OrderMapper;
 import com.deliveryapp.backend.order.model.Order;
+import com.deliveryapp.backend.order.model.OrderHistory;
+import com.deliveryapp.backend.order.model.OrderHistoryItem;
 import com.deliveryapp.backend.order.repository.OrderRepository;
 import com.deliveryapp.backend.order.specification.OrderSpecification;
 import com.deliveryapp.backend.product.enums.EProductStatus;
@@ -27,6 +29,8 @@ import com.deliveryapp.backend.store.model.Store;
 import com.deliveryapp.backend.user.enums.ERole;
 import com.deliveryapp.backend.user.exception.UserNotAuthorizedException;
 import com.deliveryapp.backend.user.model.User;
+import com.deliveryapp.backend.user.repository.UserRepository;
+import com.deliveryapp.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +57,8 @@ public class OrderService implements IOrderService {
     private final ProductRepository productRepository;
     private final AuthFacadeService authFacadeService;
     private final StoreRepository storeRepository;
+    private final OrderHistoryService orderHistoryService;
+  //  private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -391,6 +397,47 @@ public class OrderService implements IOrderService {
             order.setStatus(newStatus);
             order.setRider(authFacadeService.getCurrentUser());
             Order updatedOrder = orderRepository.save(order);
+
+            if (newStatus == EOrderStatus.COMPLETED){
+               OrderHistory orderHistory = new OrderHistory();
+               orderHistory.setRiderId(updatedOrder.getRider().getId());
+               orderHistory.setRiderName(updatedOrder.getRider().getName());
+               orderHistory.setRiderLastName(updatedOrder.getRider().getLastName());
+               orderHistory.setRiderEmail(updatedOrder.getRider().getEmail());
+               orderHistory.setConsumerId(updatedOrder.getConsumer().getId());
+               orderHistory.setConsumerName(updatedOrder.getConsumer().getName());
+               orderHistory.setConsumerLastName(updatedOrder.getConsumer().getLastName());
+               orderHistory.setConsumerEmail(updatedOrder.getConsumer().getEmail());
+               orderHistory.setCustomerAddress(updatedOrder.getCustomerAddress());
+               orderHistory.setCustomerLatitude(updatedOrder.getCustomerLatitude());
+               orderHistory.setCustomerLongitude(updatedOrder.getCustomerLongitude());
+               orderHistory.setMerchantId(updatedOrder.getStore().getOwner().getId());
+               orderHistory.setMerchantName(updatedOrder.getStore().getOwner().getName());
+               orderHistory.setMerchantLastName(updatedOrder.getStore().getOwner().getLastName());
+               orderHistory.setMerchantEmail(updatedOrder.getStore().getOwner().getEmail());
+               orderHistory.setStoreId(updatedOrder.getStore().getId());
+               orderHistory.setStoreName(updatedOrder.getStore().getName());
+               orderHistory.setStoreAddress(updatedOrder.getStore().getAddress());
+               orderHistory.setStoreLatitude(updatedOrder.getStore().getLatitude());
+               orderHistory.setStoreLongitude(updatedOrder.getStore().getLongitude());
+               List<OrderHistoryItem> listOrderHistoryItems = new ArrayList<>();
+               for (OrderItem item : updatedOrder.getItems()) {
+                   listOrderHistoryItems.add(new OrderHistoryItem(
+                           item.getProduct().getName(),
+                           item.getUnitPrice(),
+                           item.getQuantity()
+                   ));
+               }
+               orderHistory.setItems(listOrderHistoryItems);
+               orderHistory.setTotal(updatedOrder.getTotal());
+               orderHistory.setPaymentType(updatedOrder.getPaymentType());
+               orderHistory.setStatus(updatedOrder.getStatus());
+
+               orderHistoryService.saveOrderHistory(orderHistory);
+
+            }
+
+
 
             return OrderMapper.toResponse(updatedOrder);
         } else {
